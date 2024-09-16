@@ -1,0 +1,1 @@
+interface StatusCollection extends BaseCollection {}

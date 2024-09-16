@@ -1,0 +1,1 @@
+interface PlatformCollection extends BaseCollection {}
