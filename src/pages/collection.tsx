@@ -13,7 +13,7 @@ const Collection = () => {
 
   return (
     <Box>
-      <Title>Dashboard</Title>
+      <Title>Coleção de Jogos</Title>
 
       <Box gap={4} flexDirection="column" flexGrow={1} display="flex">
         <Link href="/collection/item/create" underline="hover">

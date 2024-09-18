@@ -2,6 +2,8 @@
 
 Este projeto é um gerenciador de coleções de jogos que permite registrar jogos físicos e digitais, separando-os por plataforma (Nintendo Switch, PS5, Xbox, PS4, etc.) e armazenando informações sobre o valor pago em cada jogo. O sistema também gera um dashboard exibindo estatísticas sobre o número de jogos por plataforma e tipo de mídia, além dos custos totais.
 
+![alt text](/docs/assets/image.png)
+
 ## Funcionalidades
 
 1. **Cadastro de Jogos**:
