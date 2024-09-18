@@ -1,4 +1,5 @@
 import { ProductDashboard } from '@/pages/home'
+import { preciseSum } from './sum-helpers'
 
 export function generateProductData(
   types: TypeCollection[],
@@ -17,12 +18,14 @@ export function generateProductData(
             quantity: products.filter(
               product => product.platform === platform.name && product.type === type.name
             ).length,
-            amount: products.reduce((acc, product) => {
-              if (product.platform === platform.name && product.type === type.name) {
-                return acc + product.amount
-              }
-              return acc
-            }, 0)
+            amount: preciseSum(
+              ...products.reduce<number[]>((acc, item) => {
+                if (item.platform === platform.name && item.type === type.name) {
+                  acc.push(item.amount)
+                }
+                return acc
+              }, [])
+            )
           }
         }
       }

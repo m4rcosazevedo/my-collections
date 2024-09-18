@@ -64,13 +64,13 @@ Para rodar o projeto localmente, siga os passos abaixo:
 1. Clone este repositório:
 
    ```bash
-   git clone https://github.com/seuusuario/colecao-jogos.git
+   git clone https://github.com/m4rcosazevedo/my-collections.git
    ```
 
 2. Acesse o diretório do projeto:
 
    ```bash
-   cd colecao-jogos
+   cd my-collections
    ```
 
 3. Instale as dependências:
@@ -90,24 +90,11 @@ Para rodar o projeto localmente, siga os passos abaixo:
 - **React**: Para a construção da interface do usuário e organização dos componentes.
 - **Firebase**: Para persistência dos dados, permitindo salvar os jogos cadastrados e suas informações.
 
-## Estrutura de Diretórios
-
-```bash
-src/
-│
-├── components/       # Componentes React reutilizáveis.
-├── pages/            # Páginas principais da aplicação.
-├── services/         # Arquivos de integração com o Firebase.
-├── assets/           # Imagens e outros recursos estáticos.
-└── styles/           # Estilos globais e de componentes.
-```
-
 ## Como Adicionar um Jogo
 
 1. Acesse a página principal e clique no botão de "Cadastrar item".
 2. Preencha o formulário com as informações:
 
-   - ASIN (Caso tenha em mãos).
    - Nome do jogo.
    - Upload da imagem
    - Tipo de mídia (física ou digital).

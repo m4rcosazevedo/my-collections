@@ -2,6 +2,8 @@ import { LazyImage, TextField, TextMaskCustom, Title } from '@/components/ui'
 import { db } from '@/config/firebase'
 import { useCollectionItemForm } from '@/hooks'
 import { ItemCollectionSchemaValues } from '@/schemas/item-collection.schema'
+import { uploadImage } from '@/services'
+import { searchImageOnApi } from '@/services/search-image'
 import {
   Box,
   Button,
@@ -15,9 +17,11 @@ import {
   Select
 } from '@mui/material'
 import { deleteDoc, doc } from 'firebase/firestore'
+import { useEffect, useState } from 'react'
 import { Controller } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import SelectImage from '../select-image/select-image'
 
 type ValuesProps = ItemCollectionSchemaValues
 
@@ -37,11 +41,28 @@ const PageCollectionItemAddOrUpdate = ({
   title,
   buttonStatus,
   buttonText,
-  collectionItemHook: { control, handleSubmit, errors, types, platforms, statuses },
+  collectionItemHook: {
+    control,
+    handleSubmit,
+    errors,
+    types,
+    platforms,
+    statuses,
+    watch,
+    setValue
+  },
   previewImage,
   uuid
 }: PageCollectionItemAddOrUpdateProps) => {
   const navigate = useNavigate()
+  const [open, setOpen] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [images, setImages] = useState<string[]>([])
+  const [imageView, setImageView] = useState<string | null>()
+
+  useEffect(() => {
+    setImageView(previewImage)
+  }, [previewImage])
 
   const handleDelete = async () => {
     if (!uuid) return
@@ -54,6 +75,31 @@ const PageCollectionItemAddOrUpdate = ({
       } catch (error) {
         toast.error('Erro ao excluir o item!')
       }
+    }
+  }
+
+  const handleOpen = async () => {
+    setOpen(true)
+    setLoading(true)
+    const name = watch('name')
+    const platform = watch('platform')
+    const platformName = platforms.find(({ id }) => id === platform)?.name ?? ''
+    const searchText = `${name} ${platformName}`
+    const images = await searchImageOnApi(searchText)
+    setImages(images)
+    setLoading(false)
+  }
+
+  const handleClose = () => setOpen(false)
+
+  const onSelectImage = async (image: string) => {
+    try {
+      const imageUrl = (await uploadImage({ imageUrl: image })) ?? ''
+      setValue('imageUrl', imageUrl)
+      setImageView(imageUrl)
+      handleClose()
+    } catch (error) {
+      toast.error('Erro ao selecionar imagem')
     }
   }
 
@@ -89,12 +135,19 @@ const PageCollectionItemAddOrUpdate = ({
               )}
             />
           </Grid>
-          {previewImage && (
-            <Grid item xs={12} md={2}>
-              <InputLabel>Imagem</InputLabel>
-              <LazyImage src={previewImage} alt="Imagem" width={150} height={150} />
-            </Grid>
-          )}
+          <Grid item xs={12} md={2}>
+            {imageView && (
+              <>
+                <InputLabel>Imagem</InputLabel>
+                <LazyImage src={imageView} alt="Imagem" width={150} height={150} />
+              </>
+            )}
+            {watch('name') && watch('platform') && (
+              <Button variant="contained" onClick={handleOpen} size="small">
+                Buscar Imagem
+              </Button>
+            )}
+          </Grid>
           <Grid item xs={12} md={10}>
             <InputLabel>Upload de imagem</InputLabel>
             <br />
@@ -272,13 +325,20 @@ const PageCollectionItemAddOrUpdate = ({
 
               {uuid && (
                 <Button variant="contained" color="error" onClick={handleDelete}>
-                  Voltar
+                  Excluir
                 </Button>
               )}
             </div>
           </Grid>
         </Grid>
       </Box>
+      <SelectImage
+        loading={loading}
+        open={open}
+        images={images}
+        onClose={handleClose}
+        onSelectImage={onSelectImage}
+      />
     </Box>
   )
 }

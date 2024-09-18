@@ -41,12 +41,20 @@ const Home = () => {
     amountPhysicalMedia,
     amountDigitalMedia
   } = calculateDashboardStats(items)
-
+  const productWithMaxAmount = products.reduce(
+    (max, item) => (item.amount > max.amount ? item : max),
+    products[0]
+  )
   if (loading) {
     return <Loading />
   }
 
   const resume = [
+    {
+      description: 'Item mais caro',
+      platform: productWithMaxAmount.name + ' - ' + productWithMaxAmount.platform,
+      value: formatPrice(productWithMaxAmount.amount)
+    },
     {
       description: 'Maior valor gasto em mídias',
       platform: `${maxAmountPlatform} (${maxAmountType})`,
@@ -58,14 +66,19 @@ const Home = () => {
       value: `${maxQuantity} unidades`
     },
     {
-      description: 'Total de mídias físicas',
+      description: 'Quantidade de mídias físicas',
       platform: '-',
       value: `${totalPhysicalMedia} unidades`
     },
     {
-      description: 'Total de mídias digitais',
+      description: 'Quantidade de mídias digitais',
       platform: '-',
       value: `${totalDigitalMedia} unidades`
+    },
+    {
+      description: 'Quantidade total de mídias físicas e digitais',
+      platform: '-',
+      value: `${totalPhysicalMedia + totalDigitalMedia} unidades`
     },
     {
       description: 'Total gasto em mídias físicas',
@@ -76,6 +89,11 @@ const Home = () => {
       description: 'Total gasto de mídias digitais',
       platform: '-',
       value: formatPrice(amountDigitalMedia)
+    },
+    {
+      description: 'Total gasto em mídias físicas e digitais',
+      platform: '-',
+      value: formatPrice(amountPhysicalMedia + amountDigitalMedia)
     }
   ]
 

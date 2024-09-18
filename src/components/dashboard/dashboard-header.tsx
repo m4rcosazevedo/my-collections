@@ -24,6 +24,7 @@ const DashboardHeader = ({
           {types.map(type => (
             <TableCell key={type.id}>{type.name}</TableCell>
           ))}
+          <TableCell>Total</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -39,6 +40,13 @@ const DashboardHeader = ({
                   : items[platform.name][type.name][field]}
               </TableCell>
             ))}
+            <TableCell>
+              {hasCurrency
+                ? formatPrice(
+                    types.reduce((acc, type) => acc + items[platform.name][type.name][field], 0)
+                  )
+                : types.reduce((acc, type) => acc + items[platform.name][type.name][field], 0)}
+            </TableCell>
           </TableRow>
         ))}
         <TableRow hover>
@@ -60,6 +68,29 @@ const DashboardHeader = ({
                   )}
             </TableCell>
           ))}
+          <TableCell>
+            {hasCurrency
+              ? formatPrice(
+                  platforms.reduce(
+                    (acc, platform) =>
+                      acc +
+                      types.reduce(
+                        (accType, type) => accType + items[platform.name][type.name][field],
+                        0
+                      ),
+                    0
+                  )
+                )
+              : platforms.reduce(
+                  (acc, platform) =>
+                    acc +
+                    types.reduce(
+                      (accType, type) => accType + items[platform.name][type.name][field],
+                      0
+                    ),
+                  0
+                )}
+          </TableCell>
         </TableRow>
       </TableBody>
     </Table>

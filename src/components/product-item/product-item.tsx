@@ -1,4 +1,3 @@
-import { formatPrice } from '@/utils'
 import { Button, Card, CardContent, Link, Rating } from '@mui/material'
 import { LazyImage } from '../ui'
 import * as S from './product-item.styles'
@@ -14,7 +13,7 @@ const ProductItem = ({ product }: ProductItemProps) => {
         <LazyImage src={product.image} alt={product.name} />
 
         <CardContent>
-          <section className="flex flex-col gap-1">
+          <section className="flex flex-col gap-2">
             <section>
               <Rating value={product.classification} readOnly size="small" />
             </section>
@@ -25,17 +24,17 @@ const ProductItem = ({ product }: ProductItemProps) => {
               {product.description}
             </S.Text> */}
 
-            <S.Text variant="subtitle1" color="text.secondary">
+            {/* <S.Text variant="subtitle1" color="text.secondary">
               {formatPrice(product.amount)}
-            </S.Text>
+            </S.Text> */}
 
             <S.Text variant="body1" color="text.secondary">
               {product.platform}, {product.type}
             </S.Text>
 
-            <S.Text variant="body1" color="text.secondary">
+            {/* <S.Text variant="body1" color="text.secondary">
               {product.status}
-            </S.Text>
+            </S.Text> */}
 
             <Link href={`/collection/item/${product.id}`} underline="hover">
               <Button variant="contained" color="primary" size="small">

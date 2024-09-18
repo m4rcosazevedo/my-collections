@@ -25,7 +25,9 @@ export const useCollectionItemForm = () => {
     control,
     handleSubmit,
     formState: { errors },
-    reset
+    watch,
+    reset,
+    setValue
   } = useForm<ItemCollectionSchemaValues>({
     defaultValues: DEFAULT_VALUES,
     resolver: yupResolver(itemCollectionSchema)
@@ -48,6 +50,8 @@ export const useCollectionItemForm = () => {
 
   return {
     control,
+    watch,
+    setValue,
     handleSubmit,
     errors,
     types,
