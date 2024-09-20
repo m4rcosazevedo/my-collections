@@ -17,9 +17,11 @@ import {
 import { addDoc, collection } from 'firebase/firestore'
 import Papa from 'papaparse'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 const CollectionItemCreateMulti = () => {
+  const navigate = useNavigate()
   const [uploading, setUploading] = useState(false)
   const [csvData, setCsvData] = useState<IProduct[]>([])
   const [showExampleCsv, setShowExampleCSV] = useState(false)
@@ -59,6 +61,7 @@ const CollectionItemCreateMulti = () => {
         })
       }
       toast.success('Itens cadastrados com sucesso!')
+      navigate('/collection')
     } catch (error) {
       toast.error('Erro ao cadastrar itens no Firestore')
     } finally {

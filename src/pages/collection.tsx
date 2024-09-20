@@ -13,7 +13,7 @@ const Collection = () => {
 
   return (
     <Box>
-      <Title>Coleção de Jogos</Title>
+      <Title>Coleção de Jogos E Actions Figures</Title>
 
       <Box gap={4} flexDirection="column" flexGrow={1} display="flex">
         <Link href="/collection/item/create" underline="hover">
@@ -57,6 +57,8 @@ const Collection = () => {
             />
           </Grid>
         </Grid>
+
+        <p>{filteredProducts.length} Unidades</p>
 
         <Grid container spacing={3}>
           {filteredProducts.map(product => (

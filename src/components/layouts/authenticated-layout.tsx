@@ -60,14 +60,14 @@ const AuthenticatedLayout = () => {
                 <ListItemText primary="Cadastrar item" />
               </ListItemButton>
             </ListItem>
-            {/* <ListItem>
+            <ListItem>
               <ListItemButton onClick={() => goTo('/collection/item/create/multi')}>
                 <ListItemIcon>
                   <AddAPhotoIcon />
                 </ListItemIcon>
                 <ListItemText primary="Cadastro em Lote" />
               </ListItemButton>
-            </ListItem> */}
+            </ListItem>
           </List>
         </Box>
       </Drawer>

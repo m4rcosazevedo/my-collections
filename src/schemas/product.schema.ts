@@ -11,7 +11,8 @@ const MapperPlatform = {
   '3DS': 'BD4CTGYgHzuJCRlyFU25',
   PS4: 'Dbt8a6rOOw9M8St6mh8h',
   'Game Boy Color': 'myUAvPjohwppFd9eLZWs',
-  'Super Nintendo': 'zHZlibFOiAKKA00ByDHd'
+  'Super Nintendo': 'zHZlibFOiAKKA00ByDHd',
+  Amiibo: 'oVhjLSzkXd2S4BeaEEnX'
 }
 
 const MapperStatuses = {

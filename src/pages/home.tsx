@@ -37,21 +37,26 @@ const Home = () => {
     maxQuantityType,
     maxQuantity,
     totalPhysicalMedia,
+    totalPhysicalMediaAmiibo,
     totalDigitalMedia,
     amountPhysicalMedia,
-    amountDigitalMedia
+    amountDigitalMedia,
+    amountPhysicalMediaAmiibo
   } = calculateDashboardStats(items)
+  const isAmiibo = (platform: string) => platform === 'Amiibo'
+
   const productWithMaxAmount = products.reduce(
-    (max, item) => (item.amount > max.amount ? item : max),
+    (max, item) => (!isAmiibo(item.platform) && item.amount > max.amount ? item : max),
     products[0]
   )
+
   if (loading) {
     return <Loading />
   }
 
   const resume = [
     {
-      description: 'Item mais caro',
+      description: 'Item que custou mais',
       platform: productWithMaxAmount.name + ' - ' + productWithMaxAmount.platform,
       value: formatPrice(productWithMaxAmount.amount)
     },
@@ -97,13 +102,26 @@ const Home = () => {
     }
   ]
 
+  const resumeAmiibos = [
+    {
+      description: 'Quantidade de Amiibos',
+      platform: '-',
+      value: `${totalPhysicalMediaAmiibo} unidades`
+    },
+    {
+      description: 'Total gasto em Amiibos',
+      platform: '-',
+      value: formatPrice(amountPhysicalMediaAmiibo)
+    }
+  ]
+
   return (
     <Box>
       <Title>Dashboard</Title>
 
       <Grid item xs={12} marginBottom={4}>
         <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-          <Typography variant="h6">Resumo</Typography>
+          <Typography variant="h6">Resumo dos jogos</Typography>
 
           <Table size="small" style={{ marginBottom: 32 }}>
             <TableHead>
@@ -127,10 +145,38 @@ const Home = () => {
       </Grid>
 
       <Grid item xs={12} marginBottom={4}>
+        <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+          <Typography variant="h6">Resumo dos Amiibos</Typography>
+
+          <Table size="small" style={{ marginBottom: 32 }}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Descrição</TableCell>
+                <TableCell>Valor</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {resumeAmiibos.map(item => (
+                <TableRow key={item.description} hover>
+                  <TableCell>{item.description}</TableCell>
+                  <TableCell>{item.value}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
+      </Grid>
+
+      <Grid item xs={12} marginBottom={4}>
         <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', minHeight: 240 }}>
           <Typography variant="h6">Quantidade de mídias por plataforma</Typography>
 
-          <DashboardHeader items={items} platforms={platforms} types={types} field="quantity" />
+          <DashboardHeader
+            items={items}
+            platforms={platforms.filter(platform => platform.name !== 'Amiibo')}
+            types={types}
+            field="quantity"
+          />
         </Paper>
       </Grid>
 
@@ -140,7 +186,7 @@ const Home = () => {
 
           <DashboardHeader
             items={items}
-            platforms={platforms}
+            platforms={platforms.filter(platform => platform.name !== 'Amiibo')}
             types={types}
             field="amount"
             hasCurrency
