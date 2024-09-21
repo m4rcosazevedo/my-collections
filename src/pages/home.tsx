@@ -1,3 +1,4 @@
+import { Chart } from '@/components/chart'
 import { DashboardHeader } from '@/components/dashboard'
 import { Loading, Title } from '@/components/ui'
 import { usePlatforms, useProducts, useTypes } from '@/hooks'
@@ -115,9 +116,26 @@ const Home = () => {
     }
   ]
 
+  const platformsFiltered = platforms.filter(platform => platform.name !== 'Amiibo')
+
   return (
     <Box>
       <Title>Dashboard</Title>
+
+      <Grid item xs={12} marginBottom={4}>
+        <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+          <Typography variant="h6">Valor gasto em mídias por plataforma</Typography>
+          <Chart
+            data={[
+              ['Plataformas', ...types.map(type => type.name)],
+              ...platformsFiltered.map(platform => [
+                platform.name,
+                ...types.map(type => items[platform.name][type.name].amount)
+              ])
+            ]}
+          />
+        </Paper>
+      </Grid>
 
       <Grid item xs={12} marginBottom={4}>
         <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
@@ -173,7 +191,7 @@ const Home = () => {
 
           <DashboardHeader
             items={items}
-            platforms={platforms.filter(platform => platform.name !== 'Amiibo')}
+            platforms={platformsFiltered}
             types={types}
             field="quantity"
           />
@@ -186,7 +204,7 @@ const Home = () => {
 
           <DashboardHeader
             items={items}
-            platforms={platforms.filter(platform => platform.name !== 'Amiibo')}
+            platforms={platformsFiltered}
             types={types}
             field="amount"
             hasCurrency
