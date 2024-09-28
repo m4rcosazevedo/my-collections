@@ -1,4 +1,4 @@
-import { Chart } from '@/components/chart'
+import { Chart, Pie } from '@/components/chart'
 import { DashboardHeader } from '@/components/dashboard'
 import { Loading, Title } from '@/components/ui'
 import { usePlatforms, useProducts, useTypes } from '@/hooks'
@@ -135,6 +135,38 @@ const Home = () => {
             ]}
           />
         </Paper>
+      </Grid>
+
+      <Grid container spacing={4}>
+        <Grid item xs={12} lg={6} marginBottom={4}>
+          <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+            <Typography variant="h6">Mídias Físicas por plataforma</Typography>
+            <Pie
+              data={[
+                ['Plataformas', 'Mídia Física'],
+                ...platformsFiltered.map(platform => [
+                  platform.name,
+                  items[platform.name]['Mídia Física'].quantity
+                ])
+              ]}
+            />
+          </Paper>
+        </Grid>
+
+        <Grid item xs={12} lg={6} marginBottom={4}>
+          <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+            <Typography variant="h6">Mídias Digitais por plataforma</Typography>
+            <Pie
+              data={[
+                ['Plataformas', 'Mídia Digital'],
+                ...platformsFiltered.map(platform => [
+                  platform.name,
+                  items[platform.name]['Mídia Digital'].quantity
+                ])
+              ]}
+            />
+          </Paper>
+        </Grid>
       </Grid>
 
       <Grid item xs={12} marginBottom={4}>

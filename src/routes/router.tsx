@@ -15,9 +15,9 @@ export default function Router() {
     <BrowserRouter>
       <Suspense fallback={<Loading />}>
         <Routes>
+          <Route path="/login" element={<SignIn />} />
           <Route element={<AuthenticatedLayout />}>
             <Route index element={<Home />} />
-            <Route path="/login" element={<SignIn />} />
             <Route path="/collection" element={<Collection />} />
             <Route path="/collection/item/create" element={<CollectionItemcreate />} />
             <Route path="/collection/item/create/multi" element={<CollectionItemCreateMulti />} />
