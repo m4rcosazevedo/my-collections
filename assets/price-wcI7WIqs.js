@@ -1,0 +1,1 @@
+const u=e=>new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(e),i=e=>{if(!e)return 0;const[n,o]=e.split(",").reduce((r,t,s,a)=>(s===a.length-1?r[1]=t:r[0]+=t.replace(/[^0-9-]/g,""),r),["",""]);return+`${n}.${o}`||0},c=e=>e.toFixed(2).replace(".",",");export{c as a,u as f,i as s};
