@@ -1,3 +1,5 @@
+export * from './collection-service'
+export * from './collection-service-id'
 export * from './platform-service'
 export * from './product-service'
 export * from './product-service-id'

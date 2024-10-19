@@ -1,7 +1,4 @@
-import { useAuthCheck } from '@/hooks'
-import AddAPhotoIcon from '@mui/icons-material/AddAPhoto'
-import CollectionsIcon from '@mui/icons-material/Collections'
-import DashboardIcon from '@mui/icons-material/Dashboard'
+import { useAuthCheck, useCollections } from '@/hooks'
 import LogoutIcon from '@mui/icons-material/Logout'
 
 import {
@@ -26,6 +23,7 @@ const drawerWidth = 280
 const AuthenticatedLayout = () => {
   const navigate = useNavigate()
   const { loading, user } = useAuthCheck()
+  const { collections, loading: loadingCollection } = useCollections()
 
   const goTo = (path: string) => {
     navigate(path)
@@ -47,6 +45,10 @@ const AuthenticatedLayout = () => {
 
   if (!user) {
     navigate('/login')
+    return <Loading />
+  }
+
+  if (loadingCollection) {
     return <Loading />
   }
 
@@ -72,19 +74,26 @@ const AuthenticatedLayout = () => {
               overflow: 'auto',
               justifyContent: 'space-between',
               display: 'flex',
-              flexDirection: 'column'
+              flexDirection: 'column',
+              flex: 1
             }}
           >
             <List>
               <ListItem>
                 <ListItemButton onClick={() => goTo('/')}>
-                  <ListItemIcon>
-                    <DashboardIcon />
-                  </ListItemIcon>
                   <ListItemText primary="Home" />
                 </ListItemButton>
               </ListItem>
-              <ListItem>
+
+              {collections.map(collection => (
+                <ListItem key={collection.id}>
+                  <ListItemButton onClick={() => goTo(`/collection/${collection.id}`)}>
+                    <ListItemText primary={collection.name} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+
+              {/* <ListItem>
                 <ListItemButton onClick={() => goTo('/collection')}>
                   <ListItemIcon>
                     <CollectionsIcon />
@@ -108,7 +117,9 @@ const AuthenticatedLayout = () => {
                   <ListItemText primary="Cadastro em Lote" />
                 </ListItemButton>
               </ListItem>
+             */}
             </List>
+
             <List>
               <ListItem>
                 <ListItemButton onClick={handleLogout}>

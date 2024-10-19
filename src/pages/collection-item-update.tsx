@@ -11,10 +11,10 @@ import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 const CollectionItemUpdate = () => {
-  const { uuid } = useParams()
+  const { uuidItem } = useParams()
   const collectionItemHook = useCollectionItemForm()
-  const { reset, loading: loadingOptions } = collectionItemHook
-  const { product, loading } = useProduct(uuid!)
+  const { reset, loading: loadingOptions, collection: collectionData } = collectionItemHook
+  const { product, loading } = useProduct(uuidItem!)
   const [submmiting, setSubmmiting] = useState(false)
 
   useEffect(() => {
@@ -23,15 +23,17 @@ const CollectionItemUpdate = () => {
         name: product.name,
         image: null,
         imageUrl: product.image,
-        type: product.type,
-        platform: product.platform,
+        collection: product.collection,
+        collectionFilter: collectionData?.filters ?? '',
+        type: product.type ?? '',
+        platform: product.platform ?? '',
         amount: sanitezeAmountToForm(product.amount),
-        status: product.status,
+        status: product.status ?? '',
         classification: product.classification,
         description: product.description
       } as ItemCollectionSchemaValues)
     }
-  }, [reset, product, loadingOptions])
+  }, [reset, product, loadingOptions, collectionData])
 
   const onSubmit = async (data: ItemCollectionSchemaValues) => {
     setSubmmiting(true)
@@ -45,16 +47,21 @@ const CollectionItemUpdate = () => {
           imageFile: data.image
         })
       }
-      const productRef = doc(db, 'products', uuid!)
+
+      const hasPlatforms = collectionData?.filters?.includes('platforms') ?? false
+      const hasTypes = collectionData?.filters?.includes('types') ?? false
+      const hasStatuses = collectionData?.filters?.includes('statuses') ?? false
+
+      const productRef = doc(db, 'products', uuidItem!)
       await updateDoc(productRef, {
         name: data.name,
         image: imageUrl,
-        type: data.type,
-        platform: data.platform,
         amount: sanitezeAmountToDB(data.amount),
-        status: data.status,
         classification: data.classification,
-        description: data.description
+        description: data.description,
+        ...((hasPlatforms && { platform: data.platform }) || {}),
+        ...((hasStatuses && { status: data.status }) || {}),
+        ...((hasTypes && { type: data.type }) || {})
       })
 
       toast.success(data.name + ' foi atualizado com sucesso!')
@@ -78,7 +85,7 @@ const CollectionItemUpdate = () => {
       buttonText={submmiting ? 'Atualizando...' : 'Editar'}
       collectionItemHook={collectionItemHook}
       previewImage={product?.image}
-      uuid={uuid}
+      uuid={uuidItem}
     />
   )
 }

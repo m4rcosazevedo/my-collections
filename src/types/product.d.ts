@@ -3,9 +3,10 @@ interface ProductCollection extends BaseCollection {
   classification: number
   description?: string
   image: string
-  platform: string
-  status: string
-  type: string
+  collection: string
+  platform?: string
+  status?: string
+  type?: string
 }
 
 interface ProductData extends ProductCollection {

@@ -9,6 +9,7 @@ const CollectionItemcreate = lazy(() => import('@/pages/collection-item-create')
 const CollectionItemUpdate = lazy(() => import('@/pages/collection-item-update'))
 const CollectionItemCreateMulti = lazy(() => import('@/pages/collection-item-create-multi'))
 const Collection = lazy(() => import('@/pages/collection'))
+const Collections = lazy(() => import('@/pages/collections'))
 
 export default function Router() {
   return (
@@ -18,10 +19,14 @@ export default function Router() {
           <Route path="/login" element={<SignIn />} />
           <Route element={<AuthenticatedLayout />}>
             <Route index element={<Home />} />
-            <Route path="/collection" element={<Collection />} />
-            <Route path="/collection/item/create" element={<CollectionItemcreate />} />
-            <Route path="/collection/item/create/multi" element={<CollectionItemCreateMulti />} />
-            <Route path="/collection/item/:uuid" element={<CollectionItemUpdate />} />
+            <Route path="/collection" element={<Collections />} />
+            <Route path="/collection/:uuid" element={<Collection />} />
+            <Route path="/collection/:uuid/item/create" element={<CollectionItemcreate />} />
+            <Route
+              path="/collection/:uuid/item/create/multi"
+              element={<CollectionItemCreateMulti />}
+            />
+            <Route path="/collection/:uuid/item/:uuidItem" element={<CollectionItemUpdate />} />
             <Route path="*" element={<h1>Página não existe!</h1>} />
           </Route>
         </Routes>

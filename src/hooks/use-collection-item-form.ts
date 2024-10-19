@@ -7,6 +7,8 @@ import {
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useParams } from 'react-router-dom'
+import { useCollection } from './use-collection'
 
 const DEFAULT_VALUES: ItemCollectionSchemaValues = {
   name: '',
@@ -33,6 +35,8 @@ export const useCollectionItemForm = () => {
     resolver: yupResolver(itemCollectionSchema)
   })
 
+  const { uuid } = useParams<{ uuid: string }>()
+  const { collection, loading: loadingCollection } = useCollection(uuid!)
   const [types, setTypes] = useState<TypeCollection[]>([])
   const [platforms, setPlatforms] = useState<PlatformCollection[]>([])
   const [statuses, setStatuses] = useState<StatusCollection[]>([])
@@ -59,6 +63,7 @@ export const useCollectionItemForm = () => {
     statuses,
     reset,
     DEFAULT_VALUES,
-    loading
+    loading: [loading, loadingCollection].every(Boolean),
+    collection
   }
 }

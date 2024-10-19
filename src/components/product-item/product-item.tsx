@@ -4,9 +4,13 @@ import * as S from './product-item.styles'
 
 interface ProductItemProps {
   product: ProductCollection
+  filters: string[]
 }
 
-const ProductItem = ({ product }: ProductItemProps) => {
+const ProductItem = ({ product, filters = [] }: ProductItemProps) => {
+  const hasPlatforms = filters.includes('platforms')
+  const hasTypes = filters.includes('types')
+
   return (
     <Card className="flex">
       <S.StyledCard>
@@ -20,23 +24,13 @@ const ProductItem = ({ product }: ProductItemProps) => {
 
             <S.TruncatedTypography variant="h3">{product.name}</S.TruncatedTypography>
 
-            {/* <S.Text variant="body1" color="text.secondary">
-              {product.description}
-            </S.Text> */}
+            {(hasPlatforms || hasTypes) && (
+              <S.Text variant="body1" color="text.secondary">
+                {[product.platform, product.type].join(', ')}
+              </S.Text>
+            )}
 
-            {/* <S.Text variant="subtitle1" color="text.secondary">
-              {formatPrice(product.amount)}
-            </S.Text> */}
-
-            <S.Text variant="body1" color="text.secondary">
-              {product.platform}, {product.type}
-            </S.Text>
-
-            {/* <S.Text variant="body1" color="text.secondary">
-              {product.status}
-            </S.Text> */}
-
-            <Link href={`/collection/item/${product.id}`} underline="hover">
+            <Link href={`/collection/${product.collection}/item/${product.id}`} underline="hover">
               <Button variant="contained" color="primary" size="small">
                 Detalhes
               </Button>

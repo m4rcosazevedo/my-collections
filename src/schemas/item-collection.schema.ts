@@ -3,13 +3,32 @@ import * as yup from 'yup'
 const itemCollectionSchema = yup
   .object({
     name: yup.string().required('O campo nome é obrigatório'),
-    type: yup.string().required('O campo Tipo é obrigatório'),
-    platform: yup.string().required('O campo Plataforma é obrigatório'),
+    collectionFilter: yup.string(),
+    type: yup.string().test('required', 'O campo Tipo é obrigatório', function (value) {
+      const { collectionFilter } = this.parent
+      if (collectionFilter?.includes('types')) {
+        return !!value
+      }
+      return true
+    }),
+    platform: yup.string().test('required', 'O campo Plataforma é obrigatório', function (value) {
+      const { collectionFilter } = this.parent
+      if (collectionFilter?.includes('platforms')) {
+        return !!value
+      }
+      return true
+    }),
+    status: yup.string().test('required', 'O campo Status é obrigatório', function (value) {
+      const { collectionFilter } = this.parent
+      if (collectionFilter?.includes('statuses')) {
+        return !!value
+      }
+      return true
+    }),
     amount: yup
       .string()
       .required('O campo Preço é obrigatório')
       .max(12, 'Só é permitido até 12 caracteres'),
-    status: yup.string().required('O campo Status é obrigatório'),
     classification: yup.number(),
     description: yup.string(),
     image: yup.mixed().nullable() as yup.MixedSchema<

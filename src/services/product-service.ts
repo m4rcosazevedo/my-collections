@@ -1,5 +1,5 @@
 import { db } from '@/config/firebase'
-import { collection, DocumentData, getDocs, orderBy, Query, query } from 'firebase/firestore'
+import { collection, DocumentData, getDocs, orderBy, Query, query, where } from 'firebase/firestore'
 
 export class ProductService {
   public constructor(
@@ -16,8 +16,15 @@ export class ProductService {
   }
 }
 
-export const makeProductServiceGetProducts = () => {
-  const productRef = new ProductService(query(collection(db, 'products'), orderBy('name')), getDocs)
+export const makeProductServiceGetProducts = (collectionUuid: string) => {
+  const productRef = new ProductService(
+    query(
+      collection(db, 'products'),
+      where('collection', '==', collectionUuid),
+      orderBy('name', 'asc')
+    ),
+    getDocs
+  )
 
   return productRef.getProducts()
 }

@@ -49,7 +49,8 @@ const PageCollectionItemAddOrUpdate = ({
     platforms,
     statuses,
     watch,
-    setValue
+    setValue,
+    collection
   },
   previewImage,
   uuid
@@ -59,6 +60,10 @@ const PageCollectionItemAddOrUpdate = ({
   const [loading, setLoading] = useState(true)
   const [images, setImages] = useState<string[]>([])
   const [imageView, setImageView] = useState<string | null>()
+
+  const hasPlatforms = collection?.filters?.includes('platforms') ?? false
+  const hasTypes = collection?.filters?.includes('types') ?? false
+  const hasStatuses = collection?.filters?.includes('statuses') ?? false
 
   useEffect(() => {
     setImageView(previewImage)
@@ -71,7 +76,7 @@ const PageCollectionItemAddOrUpdate = ({
       try {
         await deleteDoc(doc(db, 'products', uuid))
         toast.success('Item excluído com sucesso!')
-        navigate('/collection')
+        navigate(`/collection/${collection?.id}`)
       } catch (error) {
         toast.error('Erro ao excluir o item!')
       }
@@ -84,7 +89,7 @@ const PageCollectionItemAddOrUpdate = ({
     const name = watch('name')
     const platform = watch('platform')
     const platformName = platforms.find(({ id }) => id === platform)?.name ?? ''
-    const searchText = `${name} ${platformName}`
+    const searchText = `${name} ${hasPlatforms ? platformName : collection?.name}`
     const images = await searchImageOnApi(searchText)
     setImages(images)
     setLoading(false)
@@ -107,7 +112,7 @@ const PageCollectionItemAddOrUpdate = ({
     <Box>
       <Title>{title}</Title>
 
-      <Link href="/collection" underline="hover">
+      <Link href={`/collection/${collection?.id}`} underline="hover">
         <Button variant="contained" color="primary" size="small">
           Voltar
         </Button>
@@ -119,6 +124,13 @@ const PageCollectionItemAddOrUpdate = ({
         onSubmit={handleSubmit(onSubmit)}
         sx={{ mt: 3, width: '100%' }}
       >
+        <Controller
+          name="collectionFilter"
+          control={control}
+          defaultValue={collection?.filters || ''}
+          render={({ field }) => <input type="hidden" {...field} />}
+        />
+
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Controller
@@ -142,7 +154,7 @@ const PageCollectionItemAddOrUpdate = ({
                 <LazyImage src={imageView} alt="Imagem" width={150} height={150} />
               </>
             )}
-            {watch('name') && watch('platform') && (
+            {watch('name') && (hasPlatforms ? watch('platform') : true) && (
               <Button variant="contained" onClick={handleOpen} size="small">
                 Buscar Imagem
               </Button>
@@ -193,82 +205,89 @@ const PageCollectionItemAddOrUpdate = ({
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <Controller
-              name="type"
-              control={control}
-              render={({ field }) => (
-                <FormControl fullWidth>
-                  <InputLabel id="select-type">Selecionar Tipo</InputLabel>
-                  <Select
-                    {...field}
-                    labelId="select-type"
-                    label="Selecionar Tipo"
-                    error={!!errors.type}
-                  >
-                    {types.map(({ id, name }) => (
-                      <MenuItem key={id} value={id}>
-                        {name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  {!!errors.type && <FormHelperText error>{errors.type?.message}</FormHelperText>}
-                </FormControl>
-              )}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Controller
-              name="platform"
-              control={control}
-              render={({ field }) => (
-                <FormControl fullWidth>
-                  <InputLabel id="select-platform">Selecionar Plataforma</InputLabel>
-                  <Select
-                    {...field}
-                    labelId="select-platform"
-                    label="Selecionar Plataforma"
-                    error={!!errors.platform}
-                  >
-                    {platforms.map(({ id, name }) => (
-                      <MenuItem key={id} value={id}>
-                        {name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  {!!errors.platform && (
-                    <FormHelperText error>{errors.platform?.message}</FormHelperText>
-                  )}
-                </FormControl>
-              )}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Controller
-              name="status"
-              control={control}
-              render={({ field }) => (
-                <FormControl fullWidth>
-                  <InputLabel id="select-status">Selecionar Status</InputLabel>
-                  <Select
-                    {...field}
-                    labelId="select-status"
-                    label="Selecionar Status"
-                    error={!!errors.status}
-                  >
-                    {statuses.map(({ id, name }) => (
-                      <MenuItem key={id} value={id}>
-                        {name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  {!!errors.status && (
-                    <FormHelperText error>{errors.status?.message}</FormHelperText>
-                  )}
-                </FormControl>
-              )}
-            />
-          </Grid>
+          {hasTypes && (
+            <Grid item xs={12}>
+              <Controller
+                name="type"
+                control={control}
+                render={({ field }) => (
+                  <FormControl fullWidth>
+                    <InputLabel id="select-type">Selecionar Tipo</InputLabel>
+                    <Select
+                      {...field}
+                      labelId="select-type"
+                      label="Selecionar Tipo"
+                      error={!!errors.type}
+                    >
+                      {types.map(({ id, name }) => (
+                        <MenuItem key={id} value={id}>
+                          {name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {!!errors.type && <FormHelperText error>{errors.type?.message}</FormHelperText>}
+                  </FormControl>
+                )}
+              />
+            </Grid>
+          )}
+          {hasPlatforms && (
+            <Grid item xs={12}>
+              <Controller
+                name="platform"
+                control={control}
+                render={({ field }) => (
+                  <FormControl fullWidth>
+                    <InputLabel id="select-platform">Selecionar Plataforma</InputLabel>
+                    <Select
+                      {...field}
+                      labelId="select-platform"
+                      label="Selecionar Plataforma"
+                      error={!!errors.platform}
+                    >
+                      {platforms.map(({ id, name }) => (
+                        <MenuItem key={id} value={id}>
+                          {name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {!!errors.platform && (
+                      <FormHelperText error>{errors.platform?.message}</FormHelperText>
+                    )}
+                  </FormControl>
+                )}
+              />
+            </Grid>
+          )}
+          {hasStatuses && (
+            <Grid item xs={12}>
+              <Controller
+                name="status"
+                control={control}
+                render={({ field }) => (
+                  <FormControl fullWidth>
+                    <InputLabel id="select-status">Selecionar Status</InputLabel>
+                    <Select
+                      {...field}
+                      labelId="select-status"
+                      label="Selecionar Status"
+                      error={!!errors.status}
+                    >
+                      {statuses.map(({ id, name }) => (
+                        <MenuItem key={id} value={id}>
+                          {name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {!!errors.status && (
+                      <FormHelperText error>{errors.status?.message}</FormHelperText>
+                    )}
+                  </FormControl>
+                )}
+              />
+            </Grid>
+          )}
+
           <Grid item xs={12}>
             <Controller
               name="amount"
