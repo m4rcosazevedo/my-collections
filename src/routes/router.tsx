@@ -3,7 +3,8 @@ import { Loading } from '@/components/ui'
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
-const Home = lazy(() => import('@/pages/home'))
+// const Home = lazy(() => import('@/pages/home'))
+const Dashboard = lazy(() => import('@/pages/dashboard'))
 const SignIn = lazy(() => import('@/pages/sign-in'))
 const CollectionItemcreate = lazy(() => import('@/pages/collection-item-create'))
 const CollectionItemUpdate = lazy(() => import('@/pages/collection-item-update'))
@@ -18,7 +19,7 @@ export default function Router() {
         <Routes>
           <Route path="/login" element={<SignIn />} />
           <Route element={<AuthenticatedLayout />}>
-            <Route index element={<Home />} />
+            <Route index element={<Dashboard />} />
             <Route path="/collection" element={<Collections />} />
             <Route path="/collection/:uuid" element={<Collection />} />
             <Route path="/collection/:uuid/item/create" element={<CollectionItemcreate />} />

@@ -20,7 +20,9 @@ export class PlatformService {
 
     const snapshot = await this.get(this.service)
     snapshot.forEach((doc: DocumentData) => {
-      platformMap.set(doc.id, doc.data().name)
+      if (doc.data().name) {
+        platformMap.set(doc.id, doc.data().name)
+      }
     })
     return platformMap
   }

@@ -1,3 +1,4 @@
+export * from './use-all-products'
 export * from './use-auth-check'
 export * from './use-collection'
 export * from './use-collection-item-form'

@@ -22,3 +22,12 @@ export function preciseSum(...numbers: number[]): number {
 
   return sum / scaleFactor
 }
+
+export function sum(a: number, b: number): number {
+  const scaleFactor = Math.pow(10, 15)
+
+  const scaledNumA = Math.round(a * scaleFactor)
+  const scaledNumB = Math.round(b * scaleFactor)
+
+  return (scaledNumA + scaledNumB) / scaleFactor
+}

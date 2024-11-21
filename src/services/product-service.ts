@@ -28,3 +28,12 @@ export const makeProductServiceGetProducts = (collectionUuid: string) => {
 
   return productRef.getProducts()
 }
+
+export const makeProductServiceGetAllProducts = () => {
+  const productRef = new ProductService(
+    query(collection(db, 'products'), orderBy('name', 'asc')),
+    getDocs
+  )
+
+  return productRef.getProducts()
+}

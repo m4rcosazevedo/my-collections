@@ -35,6 +35,9 @@ const Collection = () => {
   const hasTypes = collection.filters.includes('types')
   const hasStatuses = collection.filters.includes('statuses')
 
+  console.log(platforms);
+
+
   return (
     <Box>
       <Title>{collection.name}</Title>

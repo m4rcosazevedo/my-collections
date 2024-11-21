@@ -14,6 +14,16 @@ export class CollectionService {
       ...doc.data()
     })) as Collection[]
   }
+
+  async getAllMap(): Promise<Map<string, string>> {
+    const map = new Map<string, string>()
+
+    const snapshot = await this.get(this.service)
+    snapshot.forEach((doc: DocumentData) => {
+      map.set(doc.id, doc.data().name)
+    })
+    return map
+  }
 }
 
 export const makeCollectionService = () => {
@@ -22,4 +32,8 @@ export const makeCollectionService = () => {
 
 export const makeCollectionServiceGetAll = () => {
   return makeCollectionService().getAll()
+}
+
+export const makeCollectionServiceGetAllMap = () => {
+  return makeCollectionService().getAllMap()
 }
