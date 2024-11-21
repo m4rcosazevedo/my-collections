@@ -3,7 +3,6 @@ import { Loading } from '@/components/ui'
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
-// const Home = lazy(() => import('@/pages/home'))
 const Dashboard = lazy(() => import('@/pages/dashboard'))
 const SignIn = lazy(() => import('@/pages/sign-in'))
 const CollectionItemcreate = lazy(() => import('@/pages/collection-item-create'))
