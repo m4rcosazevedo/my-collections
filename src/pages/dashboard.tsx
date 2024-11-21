@@ -42,9 +42,6 @@ function Dashboard() {
   }, {} as Record<string, Record<string, Record<string, { quantity: number, amount: number }>>>)
 
 
-  console.log(gamesSanitized);
-
-
   return (
     <Box>
       <Title>Dashboard</Title>
