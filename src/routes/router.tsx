@@ -11,9 +11,24 @@ const CollectionItemCreateMulti = lazy(() => import('@/pages/collection-item-cre
 const Collection = lazy(() => import('@/pages/collection'))
 const Collections = lazy(() => import('@/pages/collections'))
 
+const PathnameRedirect = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    const search = new URLSearchParams(location.search)
+    const redirectPath = search.get('/')
+    if (redirectPath) {
+      window.history.replaceState({}, '', redirectPath)
+    }
+  }, [location])
+
+  return null
+}
+
 export default function Router() {
   return (
     <BrowserRouter>
+      <PathnameRedirect />
       <Suspense fallback={<Loading />}>
         <Routes>
           <Route path="/login" element={<SignIn />} />
