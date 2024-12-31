@@ -1,7 +1,7 @@
 import { AuthenticatedLayout } from '@/components/layouts'
 import { Loading } from '@/components/ui'
-import { lazy, Suspense } from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { lazy, Suspense, useEffect } from 'react'
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
 
 const Dashboard = lazy(() => import('@/pages/dashboard'))
 const SignIn = lazy(() => import('@/pages/sign-in'))
